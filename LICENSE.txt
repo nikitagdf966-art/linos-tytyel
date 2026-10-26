@@ -1,0 +1,27 @@
+LinOS 1.0 / tytyel 1.0
+Copyright (c) 2026 LinOS project. All rights reserved.
+
+BINARY PREVIEW LICENSE
+
+You may:
+  - download and run the LinOS ISO and the tytyel gateway on your own computers;
+  - share the original, unmodified files together with this license and
+    SHA256SUMS.txt;
+  - use screenshots and short quotes for reviews, articles and videos.
+
+You may not:
+  - sell LinOS or the gateway, or include them in a paid product, without
+    written permission;
+  - distribute modified or rebranded builds under the LinOS or tytyel names;
+  - claim that LinOS is Linux, or that it contains the Linux kernel.
+
+Source code is not included in this binary preview.
+
+The software is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose and noninfringement. In no event shall the
+authors be liable for any claim, damages or other liability arising from the
+use of the software.
+
+Music files in the ISO are vintage recordings included for testing only.
+Rights belong to their respective owners.
