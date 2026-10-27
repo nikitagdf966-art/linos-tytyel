@@ -7,11 +7,11 @@ LinOS 1.0 is the first public build of a small x86_64 UEFI system written from s
 ## Highlights
 
 - **Own bootloader** (`BOOTX64.EFI`, 6 KB) and **own kernel** (`kernel.efi`, 67 KB), both stripped and built without libc.
-- **tytyel browser** — DHCP, DNS, ARP, TCP and HTTP/1.0 implemented in the kernel; HTTPS and Wiby search through a tiny host-side gateway.
+- **tytyel browser** — DHCP, DNS, ARP, TCP and HTTP/1.0 implemented in the kernel; opens real sites over plain HTTP through VirtualBox NAT.
 - **Text shell** with around 60 commands: files, folders, colors, history, disks, calculator, assistant, PC-speaker beep.
 - **Runs from a read-only ISO** inside VirtualBox or QEMU. Nothing is installed on your host.
 - **34 MB ISO** — small enough to keep on a USB stick.
-- **Windows host gateway** included as a readable PowerShell script — local only, `127.0.0.1:8088`, no admin rights.
+- **No host-side scripts** — the VM uses the network directly, nothing runs on your PC.
 
 ## Tested VirtualBox settings
 
@@ -31,12 +31,11 @@ Boot the VM, wait for `LinOS />`, then type `help` or `tytyel`.
 
 ## Internet
 
-1. Unzip `Tytyel-Gateway-1.0.zip` on the Windows host and run `Start Gateway.bat`.
-2. Keep its window open. It listens only on `127.0.0.1:8088`.
-3. In the VM run `tytyel` — it should print `Shlyuz DOSTUPEN`.
-4. Type a query like `linux` or a URL, then press a result number.
+1. Start the VM with NAT networking and an Intel PRO/1000 MT Desktop adapter.
+2. In the VM run `tytyel`.
+3. Type a site address such as `example.com`, then press a link number.
 
-Without the gateway tytyel can still try direct HTTP, but HTTPS and search will not work.
+HTTPS is not implemented in 1.0, so only plain-HTTP sites open.
 
 ## Is it a virus?
 
@@ -44,14 +43,13 @@ No. It is a hobby operating system contained in a virtual machine:
 
 - no installer, no services, no registry changes, no host file access;
 - no telemetry, no analytics, no auto-update, no remote code;
-- the gateway is a local-only helper you can read before running;
+- no host-side helper scripts at all;
 - the EFI binaries are unsigned, so SmartScreen may warn — normal for hobby OSes;
 - verify everything with `SHA256SUMS.txt`:
 
 ```
-4f99098412206994dab44489d5e6dabbb56ab1f7e08f18e90473e4453a1820ad  LinOS.iso
-d0d6a5b02a489ec5bc8e0a503a0e94f582f3c68a26d1d67a12c0edd52d5d893a  Tytyel-Gateway-1.0.zip
-33fafd741b26130c26bfbc0dfc817205340d9840fd9db58e27d225ae804d8c22  kernel.efi
+3a2ecf215edeea25f36ffe6d700fabaf82937d723bacac4d1a4dde20e077bc41  LinOS.iso
+93f41dbc0712f52ea4247ce49d20a5ca2f124b5725d235ec1d18781412720918  kernel.efi
 490a3c3030a670b49ea14240d1b53335d5c43325dc670f6a4eeac4673f8fc3ce  EFI/BOOT/BOOTX64.EFI
 ```
 
