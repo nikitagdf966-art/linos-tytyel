@@ -60,8 +60,8 @@ No. It is a hobby operating system contained in a virtual machine:
 - verify everything with `SHA256SUMS.txt`:
 
 ```
-5b67e71acef834c6b7c54a9f325a55df1fca9c3ff82de47947fc76b1daecf174  LinOS.iso
-a8b15c8358b4dffc03a93cbffca72bfed0482e88594308c93e3a80d9f3c5bb83  kernel.efi
+ca2f1c744c36d5dabbe4854b9fbb6b0b555c9e8cf9bd33b9f1324d25939f9db7  LinOS.iso
+a9c89c94274cfd857608b21f60aab54ba63c46898b0d604daff8a2dd2b7e5a53  kernel.efi
 490a3c3030a670b49ea14240d1b53335d5c43325dc670f6a4eeac4673f8fc3ce  EFI/BOOT/BOOTX64.EFI
 ```
 
