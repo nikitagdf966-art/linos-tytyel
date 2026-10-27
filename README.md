@@ -16,7 +16,6 @@ LinOS is a hobby x86_64 UEFI system written from scratch in freestanding C. The 
 | `kernel.efi` | LinOS kernel: memory, LinFS filesystem, shell, drivers, apps (67 KB) |
 | Shell | ~60 built-in commands: files, disks, colors, history, install |
 | tytyel | Text browser: DHCP, DNS, ARP, TCP and HTTP implemented in the kernel |
-| Gateway | Optional Windows helper that adds HTTPS and Wiby search to tytyel |
 | Apps | `calc`, `01 gpt` assistant, `beep` |
 
 Everything is a single bootable ISO. Nothing is installed on your computer unless you explicitly run `setup` inside LinOS.
@@ -26,7 +25,6 @@ Everything is a single bootable ISO. Nothing is installed on your computer unles
 | File | Size | What it is |
 |---|---|---|
 | `LinOS.iso` | 34 MB | Bootable UEFI ISO (system + apps) |
-| `Tytyel-Gateway-1.0.zip` | small | Windows host helper: HTTPS + web search for tytyel |
 | `SHA256SUMS.txt` | tiny | Checksums for the files above |
 
 ## Quick start in VirtualBox (tested configuration)
@@ -44,23 +42,19 @@ These are the exact settings the release was tested with. Other e1000 adapters m
 
 ## Internet in tytyel
 
-Plain HTTP works through VirtualBox NAT. For **HTTPS sites and web search**, tytyel talks to a tiny gateway running on your Windows host:
+tytyel uses VirtualBox NAT and speaks plain HTTP directly: DHCP, DNS, ARP, TCP and HTTP/1.0 are implemented inside the kernel. There is no host-side helper, no script and no proxy — the virtual machine talks to the network on its own.
 
-1. Download and unzip `Tytyel-Gateway-1.0.zip`.
-2. Run **`Start Gateway.bat`** (it asks Windows to allow the local script once). Keep the window open.
-3. The gateway listens only on `127.0.0.1:8088` on your PC. The VM reaches it at `10.0.2.2:8088`.
-4. In LinOS run `tytyel`. It prints `Shlyuz DOSTUPEN` when the gateway is found.
+Type a site address such as `example.com`. HTTPS is not implemented yet: TLS is on the roadmap together with the offline web archive.
 
-The gateway is a host-side helper, not part of the OS. It is a readable PowerShell script so you can inspect exactly what it does. Close its window to stop it.
+A self-contained offline archive — one multi-gigabyte file with its own search index — is planned for the next release, so tytyel can search without any network at all.
 
 ### Using tytyel
 
-Type a search query or a site address at the `tytyel>` prompt:
+Type a site address at the `tytyel>` prompt:
 
 ```
-tytyel> linux
 tytyel> example.com
-tytyel> https://wiby.me
+tytyel> http://wiby.me
 ```
 
 After a page loads:
@@ -71,11 +65,9 @@ After a page loads:
 | `s` | new search |
 | `b` | back |
 | `r` | reload |
-| `gw` | gateway status |
-| `gwoff` / `gwon` | disable / enable the gateway |
 | `q` | quit to the LinOS shell |
 
-tytyel is a text browser. JavaScript-heavy sites will look incomplete or empty; simple pages, docs and Wiby results work best.
+tytyel is a text browser. JavaScript-heavy sites will look incomplete or empty; simple pages and plain HTML work best.
 
 ## Shell cheat sheet
 
@@ -97,7 +89,7 @@ This is a hobby OS, not a product. Here is exactly what it does and does not do:
 
 - **It runs entirely inside the virtual machine.** It never installs anything on your host, adds no startup entries, services or registry keys, and cannot read your host files.
 - **No telemetry, no analytics, no auto-update, no remote code.** The kernel only makes network requests you trigger in tytyel.
-- **The gateway listens on `127.0.0.1:8088` only.** It is unreachable from the internet, and closing the window stops it.
+- **No host-side scripts at all.** Nothing runs on your computer besides VirtualBox, and the OS never writes to your disk.
 - **The EFI binaries are unsigned.** Windows SmartScreen and some antivirus tools warn about any unsigned bootloader. This is expected for a hobby OS and is not a malware signal.
 - **Check the hashes.** Compare `SHA256SUMS.txt` with the files you downloaded.
 - **The ISO is easy to inspect.** It contains two EFI binaries, three text files and a checksum file inside one FAT boot image. No installers, no scripts, no music, no hidden payloads.
@@ -126,7 +118,7 @@ Accepted apps get credit in the release notes. Small, useful and text-friendly w
 - No audio driver and no MP3 decoder yet.
 - No Wi-Fi; e1000 wired NIC only.
 - No multitasking or protected user mode; apps run in kernel context.
-- HTTPS is handled by the host gateway, not by TLS inside LinOS.
+- HTTPS is not implemented yet (no TLS inside LinOS).
 - `setup` / `install` can copy the two EFI binaries to a writable disk (experimental).
 - Some pages render poorly; tytyel is not a full browser engine.
 
@@ -152,9 +144,9 @@ Accepted apps get credit in the release notes. Small, useful and text-friendly w
 4. Подключить `LinOS.iso` к IDE-приводу и запустить VM.
 5. В консоли `LinOS />` набрать `help` или `tytyel`.
 
-Для HTTPS и поиска: распаковать `Tytyel-Gateway-1.0.zip`, запустить `Start Gateway.bat` на Windows-хосте, оставить окно открытым. В VM запустить `tytyel` и ввести запрос. Шлюз слушает только `127.0.0.1:8088`; VM видит его как `10.0.2.2:8088`.
+Интернет: сеть работает напрямую через NAT VirtualBox (DHCP, DNS, ARP, TCP и HTTP внутри ядра). Никаких скриптов и шлюзов на хосте нет. В VM запустите `tytyel` и введите адрес сайта, например `example.com`. HTTPS пока не поддерживается — TLS и офлайн-архив в планах.
 
-Это не вирус: система работает только внутри виртуальной машины, ничего не ставит на хост, не имеет телеметрии и автозапуска, а шлюз — это локальный скрипт, который можно прочитать. Хэши проверяйте по `SHA256SUMS.txt`. EFI-файлы без подписи, поэтому Windows может предупреждать — для домашней ОС это нормально.
+Это не вирус: система работает только внутри виртуальной машины, ничего не ставит на хост, не имеет телеметрии и автозапуска. Хэши проверяйте по `SHA256SUMS.txt`. EFI-файлы без подписи, поэтому Windows может предупреждать — для домашней ОС это нормально.
 
 **Нужны приложения!** Присылайте идеи или C-код через Issues. После трёх принятых приложений выйдет обновление **LinOS 1.1** с ними, интерфейсом приложений и звуком (MP3-плеером).
 
