@@ -78,6 +78,7 @@ ls / cd / pwd        folders
 mkdir / write / cat  files
 calc                 integer calculator
 beep 880 300         test the PC speaker
+desktop / gui        graphical desktop (Esc returns to the shell)
 net                  network interfaces and link status
 tytyel               browser
 reboot / shutdown    power
@@ -114,7 +115,7 @@ Accepted apps get credit in the release notes. Small, useful and text-friendly w
 
 ## Limitations (honest list)
 
-- Text only; no graphics desktop yet.
+- Desktop is version 0.1: static launcher, no windows yet, cursor driven by mouse or keyboard.
 - No audio driver and no MP3 decoder yet.
 - No Wi-Fi; e1000 wired NIC only.
 - No multitasking or protected user mode; apps run in kernel context.
